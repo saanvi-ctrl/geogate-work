@@ -151,8 +151,7 @@ export async function verifyCandidate(req, res) {
     const residentialProxyDetected =
       networkCheck?.residentialProxyDetected === true ||
       networkCheck?.is_residential_proxy === true ||
-      ipInfo.is_residential_proxy === true ||
-      proxyType.includes("residential");
+      ipInfo.is_residential_proxy === true;
 
     const publicProxyDetected =
       networkCheck?.publicProxyDetected === true ||
