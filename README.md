@@ -3,25 +3,7 @@
 GeoGate is a full-stack web application that evaluates candidates before granting access to an online assessment. It combines GPS-based geofencing and IP intelligence to verify a candidate's location and detect potentially suspicious network activity.
 
 The application allows employers to configure a test centre, define a permitted geographical radius, and select mandatory fraud checks. Candidates must pass the GPS verification and all selected checks to receive assessment authorization.
-
-## 📸 Application Screenshots
-
-Add your application screenshots to `docs/images/` and use the following image paths.
-
-### Login Page
-![GeoGate Login](docs/images/login.png)
-
-### Employer Dashboard
-![Employer Dashboard](docs/images/employer-dashboard.png)
-
-### Candidate Verification
-![Candidate Verification](docs/images/candidate-verification.png)
-
-### Verification Result
-![Verification Result](docs/images/verification-result.png)
-
-### Fraud Detection Results
-![Fraud Detection Results](docs/images/fraud-detection.png)
+tection Results](docs/images/fraud-detection.png)
 
 ---
 
