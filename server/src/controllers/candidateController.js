@@ -125,28 +125,37 @@ export async function verifyCandidate(req, res) {
     const jobCountry = normalizeCountry(geofence.jobCountry);
 
     const candidateCountry = normalizeCountry(
-      ipInfo.country_code || networkCheck?.country_code
+      networkCheck?.countryCode ||
+      networkCheck?.country_code ||
+      ipInfo.country_code
     );
 
     const vpnDetected =
+      networkCheck?.vpnDetected === true ||
       networkCheck?.is_vpn === true ||
       ipInfo.is_vpn === true;
 
     const proxyDetected =
+      networkCheck?.proxyDetected === true ||
       networkCheck?.is_proxy === true ||
       ipInfo.is_proxy === true;
 
     const proxyType = String(
+      networkCheck?.proxyType ||
       networkCheck?.proxy_type ||
       ipInfo.proxy_type ||
+      ipInfo.type ||
       ""
     ).trim().toLowerCase();
 
     const residentialProxyDetected =
+      networkCheck?.residentialProxyDetected === true ||
       networkCheck?.is_residential_proxy === true ||
-      ipInfo.is_residential_proxy === true;
+      ipInfo.is_residential_proxy === true ||
+      proxyType.includes("residential");
 
     const publicProxyDetected =
+      networkCheck?.publicProxyDetected === true ||
       networkCheck?.is_public_proxy === true ||
       ipInfo.is_public_proxy === true ||
       proxyType.includes("public") ||
@@ -194,7 +203,9 @@ export async function verifyCandidate(req, res) {
       proxyDetected,
       proxyType,
       residentialProxyDetected,
-      publicProxyDetected
+      publicProxyDetected,
+      candidateCountry,
+      jobCountry
     });
 
     const checkResults = selectedChecks
@@ -239,14 +250,20 @@ export async function verifyCandidate(req, res) {
         networkCheck?.is_tor === true ||
         ipInfo.is_tor === true,
 
-      relayDetected: networkCheck?.is_relay === true,
+      relayDetected:
+        networkCheck?.is_relay === true ||
+        ipInfo.is_relay === true,
 
       networkScore: networkCheck?.score ?? null,
       networkVerdict: networkCheck?.verdict || "unknown",
       networkReputation: networkCheck?.reputation || "unknown",
       networkSignals: signals,
 
-      vpnProvider: "",
+      vpnProvider:
+        networkCheck?.vpnProvider ||
+        ipInfo.vpn_provider ||
+        "",
+
       networkCheckCompleted,
       networkCheckSource: "IPLogs browser",
       networkCheckMessage: networkCheckCompleted
