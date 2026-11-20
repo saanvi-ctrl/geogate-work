@@ -109,7 +109,11 @@ export async function verifyCandidate(req, res) {
       distance <= radiusMetres;
 
     const ipInfo = networkCheck?.ip_info || {};
-    console.log("IPLOGS NETWORK RESPONSE:", JSON.stringify(networkCheck, null, 2));
+
+    console.log(
+      "IPLOGS NETWORK RESPONSE:",
+      JSON.stringify(networkCheck, null, 2)
+    );
 
     const publicIp = String(
       ipInfo.ip || networkCheck?.ip || ""
@@ -135,14 +139,12 @@ export async function verifyCandidate(req, res) {
     const proxyType = String(
       networkCheck?.proxy_type ||
       ipInfo.proxy_type ||
-      ipInfo.type ||
       ""
-    ).toLowerCase();
+    ).trim().toLowerCase();
 
     const residentialProxyDetected =
       networkCheck?.is_residential_proxy === true ||
-      ipInfo.is_residential_proxy === true ||
-      proxyType.includes("residential");
+      ipInfo.is_residential_proxy === true;
 
     const publicProxyDetected =
       networkCheck?.is_public_proxy === true ||
@@ -185,6 +187,15 @@ export async function verifyCandidate(req, res) {
         networkCheckCompleted &&
         !publicProxyDetected
     };
+
+    console.log("PROXY VERIFICATION:", {
+      publicIp,
+      vpnDetected,
+      proxyDetected,
+      proxyType,
+      residentialProxyDetected,
+      publicProxyDetected
+    });
 
     const checkResults = selectedChecks
       .filter(id => CHECK_NAMES[id])
