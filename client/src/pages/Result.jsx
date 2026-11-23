@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
   CheckCircle2,
@@ -100,6 +99,7 @@ export default function Result() {
 
   const allChecks = Object.entries(CHECK_NAMES).map(([id, name]) => {
     const checkId = Number(id);
+
     const result = checkResults.find(
       check => Number(check.checkId) === checkId
     );
@@ -116,15 +116,21 @@ export default function Result() {
   });
 
   const selectedChecks = allChecks.filter(check => check.selected);
+
   const passedChecks = selectedChecks.filter(
     check => check.result?.passed === true
   ).length;
+
   const totalChecks = selectedChecks.length;
 
   return (
     <AppLayout>
       <div className="result-wrap">
-        <section className={`result-hero ${accessAllowed ? "result-allowed" : "result-denied"}`}>
+        <section
+          className={`result-hero ${
+            accessAllowed ? "result-allowed" : "result-denied"
+          }`}
+        >
           <div className="result-symbol">
             {accessAllowed ? (
               <CheckCircle2 size={35} />
@@ -134,7 +140,9 @@ export default function Result() {
           </div>
 
           <div className="eyebrow">
-            {accessAllowed ? "VERIFICATION PASSED" : "VERIFICATION FAILED"}
+            {accessAllowed
+              ? "VERIFICATION PASSED"
+              : "VERIFICATION FAILED"}
           </div>
 
           <h1>
@@ -169,15 +177,22 @@ export default function Result() {
             <MapPin size={17} />
             <span>
               <b>{attempt.centreName || "Test centre not available"}</b>
-              <small>{attempt.address || "Address not available"}</small>
+              <small>
+                {attempt.address || "Address not available"}
+              </small>
             </span>
           </div>
 
           <div className="detail-line">
             <ShieldCheck size={17} />
             <span>
-              <b>{attempt.candidateName || "Candidate name not available"}</b>
-              <small>Candidate ID: {attempt.candidateId || "Not available"}</small>
+              <b>
+                {attempt.candidateName ||
+                  "Candidate name not available"}
+              </b>
+              <small>
+                Candidate ID: {attempt.candidateId || "Not available"}
+              </small>
             </span>
           </div>
 
@@ -214,7 +229,11 @@ export default function Result() {
                 </b>
               </span>
 
-              <b className={locationPassed ? "allowed" : "denied"}>
+              <b
+                className={
+                  locationPassed ? "allowed" : "denied"
+                }
+              >
                 {locationPassed
                   ? "Passed"
                   : locationRecorded
@@ -241,22 +260,28 @@ export default function Result() {
               }}
             >
               <b>Fraud checks passed</b>
-              <b className={passedChecks === totalChecks ? "allowed" : "denied"}>
+
+              <b
+                className={
+                  passedChecks === totalChecks
+                    ? "allowed"
+                    : "denied"
+                }
+              >
                 {passedChecks}/{totalChecks} Passed
               </b>
             </div>
 
             <div style={{ display: "grid", gap: "12px" }}>
-              {allChecks.map(check => {
+              {selectedChecks.map(check => {
                 const passed = check.result?.passed === true;
                 const failed = check.result?.passed === false;
-                const status = !check.selected
-                  ? "Not selected"
-                  : passed
-                    ? "Passed"
-                    : failed
-                      ? "Failed"
-                      : "Not recorded";
+
+                const status = passed
+                  ? "Passed"
+                  : failed
+                    ? "Failed"
+                    : "Not recorded";
 
                 return (
                   <div
@@ -272,18 +297,34 @@ export default function Result() {
                     }}
                   >
                     {passed ? (
-                      <CheckCircle2 size={19} color="#16a36a" />
+                      <CheckCircle2
+                        size={19}
+                        color="#16a36a"
+                      />
                     ) : failed ? (
-                      <XCircle size={19} color="#e05260" />
+                      <XCircle
+                        size={19}
+                        color="#e05260"
+                      />
                     ) : (
                       <MinusCircle size={19} />
                     )}
 
                     <span style={{ flex: 1 }}>
-                      <b>{check.checkId}. {check.name}</b>
+                      <b>
+                        {check.checkId}. {check.name}
+                      </b>
                     </span>
 
-                    <b className={passed ? "allowed" : failed ? "denied" : "muted"}>
+                    <b
+                      className={
+                        passed
+                          ? "allowed"
+                          : failed
+                            ? "denied"
+                            : "muted"
+                      }
+                    >
                       {status}
                     </b>
                   </div>
@@ -299,7 +340,9 @@ export default function Result() {
               <ShieldCheck size={17} />
               <span>
                 <b>Job country</b>
-                <small>{attempt.jobCountry || "Not configured"}</small>
+                <small>
+                  {attempt.jobCountry || "Not configured"}
+                </small>
               </span>
             </div>
 
@@ -307,7 +350,10 @@ export default function Result() {
               <MapPin size={17} />
               <span>
                 <b>Candidate IP country</b>
-                <small>{attempt.candidateCountry || "Not available"}</small>
+                <small>
+                  {attempt.candidateCountry ||
+                    "Not available"}
+                </small>
               </span>
             </div>
 
@@ -323,8 +369,9 @@ export default function Result() {
 
             {attempt.networkCheckCompleted === false && (
               <p className="error-text">
-                The IP verification service did not complete successfully.
-                Selected IP checks cannot be treated as passed.
+                The IP verification service did not complete
+                successfully. Selected IP checks cannot be treated
+                as passed.
                 {attempt.networkCheckMessage
                   ? ` ${attempt.networkCheckMessage}`
                   : ""}
@@ -338,25 +385,34 @@ export default function Result() {
               onClick={authorize}
               disabled={authorizing}
             >
-              {authorizing ? "Authorizing..." : "Authorize candidate"}
+              {authorizing
+                ? "Authorizing..."
+                : "Authorize candidate"}
             </button>
           )}
 
           {!accessAllowed && (
             <p className="error-text">
-              Candidate not authorized. The mandatory GPS check and all selected fraud checks must pass.
+              Candidate not authorized. The mandatory GPS check and
+              all selected fraud checks must pass.
             </p>
           )}
 
           {attempt.authorized && accessAllowed && (
             <p className="success-text">
-              {message || "Candidate authorized successfully."}
+              {message ||
+                "Candidate authorized successfully."}
             </p>
           )}
 
-          {error && <p className="error-text">{error}</p>}
+          {error && (
+            <p className="error-text">{error}</p>
+          )}
 
-          <Link className="back-link" to="/candidate">
+          <Link
+            className="back-link"
+            to="/candidate"
+          >
             Return to candidate workspace
           </Link>
         </section>
