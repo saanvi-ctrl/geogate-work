@@ -135,8 +135,6 @@ geogate-work/
 │   │   └── ...
 │   └── package.json
 │
-├── docs/
-│   └── images/
 │
 └── README.md
 ```
